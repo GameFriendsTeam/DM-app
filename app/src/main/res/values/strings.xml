@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">DecentralizedMessenger</string>
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="apply">Start</string>
+    <string name="server_address">Sever address</string>
+    <string name="username">You username</string>
+    <string name="hint_message">Сообщение</string>
+    <string name="send">Отправить</string>
+    <string name="new_chat">Новый чат</string>
+    <string name="hint_username">Имя пользователя</string>
+    <string name="create">Создать</string>
+    <string name="error_no_chat">Чат не выбран</string>
+    <string name="new_chat_btn">New Chat</string>
+</resources>

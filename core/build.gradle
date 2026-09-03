@@ -1,0 +1,53 @@
+plugins {
+    id 'java-library'
+    id 'application'
+}
+
+group = 'ru.gft.decentralizedmessenger'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // BouncyCastle: X25519, Ed25519, HKDF primitives (version-independent, Java 8+).
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.78.1'
+    implementation 'org.bouncycastle:bcpkix-jdk18on:1.78.1'
+    // Gson for JSON (Packet payload, config, trusted-key store).
+    implementation 'com.google.code.gson:gson:2.10.1'
+}
+
+application {
+    mainClass = 'ru.gft.decentralizedmessenger.Main'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ru.gft.decentralizedmessenger.Main'
+    }
+}
+
+// Build a self-contained fat jar with all dependencies bundled,
+// so the program can be run as `java -jar decentralized-messenger.jar`.
+// BouncyCastle jars are signed — strip their signature files so the merged jar verifies.
+tasks.register('fatJar', Jar) {
+    archiveBaseName.set('decentralized-messenger')
+    archiveClassifier.set('')
+    archiveVersion.set('')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest { attributes 'Main-Class': 'ru.gft.decentralizedmessenger.Main' }
+    exclude 'META-INF/*.SF', 'META-INF/*.RSA', 'META-INF/*.DSA', 'META-INF/*.EC'
+    exclude 'module-info.class'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
+
+build.dependsOn fatJar
